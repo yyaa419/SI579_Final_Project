@@ -4,9 +4,10 @@ import { CSS } from "@dnd-kit/utilities";
 import { Flex } from "@chakra-ui/react";
 import "./TaskItem.css";
 
-export const TaskItem = ({title }) => {
+export const TaskItem = ({uid, title}) => {
   const { attributes,listeners, setNodeRef, transform } = useSortable({
-    id: title,
+    id: uid,
+    data: { title },
   });
 
 

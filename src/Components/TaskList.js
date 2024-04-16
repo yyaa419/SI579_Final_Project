@@ -4,8 +4,9 @@ import TaskItem from "./TaskItem";
 import {Text} from "@chakra-ui/react";
 import "./TaskList.css";
 
-const TaskList = ({title, tasks, onDelete }) => {
+const TaskList = ({title, tasks }) => {
   const {setNodeRef} = useDroppable({id: title});
+  
   return(
     <article flex="3" padding="5" flexDirection="column" minH="10rem" className="column">
     <Text fontWeight="bold" >{title}</Text>
@@ -14,7 +15,7 @@ const TaskList = ({title, tasks, onDelete }) => {
     <div ref={setNodeRef} className="list">
       {tasks.map((item) => (
         <div>
-        <TaskItem key={item} title={item} onDelete={onDelete}></TaskItem>
+        <TaskItem uid={item.uid} title={item.name}></TaskItem>
         </div>
       ))}
     </div>
