@@ -1,5 +1,8 @@
-import { Flex, Button, Input } from "@chakra-ui/react";
+import { v4 as uuidv4 } from "uuid";
 import {
+  Flex,
+  Button,
+  Input,
   FormControl,
   FormLabel,
   RadioGroup,
@@ -12,30 +15,35 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
-
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 
-export default function AddTask({ addTask }) {
-  const [title, setTitle] = useState("");
-  const [type, setType] = useState("ToDo");
-  const [isEmpty, setisEmpty] = useState(false); 
+export default function AddTask({ itemLists, setItemLists }) {
+  const [task, setTask] = useState({
+    uid: uuidv4(),
+    name: "",
+    status: "ToDo",
+  });
+
+  const [input, setInput] = useState("");
+  const [isEmpty, setisEmpty] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
 
-  const handleTaskType = (e) => {
-    setType(e.target.value);
-  }
-
-  const handleAddCard = () => {
-    if (title.trim() === "") {
+  const handleAddTask = () => {
+    if (task.name.trim() === "") {
       setisEmpty(true);
       setIsOpen(true);
       return;
     }
     setisEmpty(false);
-    addTask(type,title);
-    setTitle("");
+    setItemLists((prevItemLists) => {
+      const updatedLists = [...prevItemLists, task];
+      localStorage.setItem("itemLists", JSON.stringify(updatedLists));
+      return updatedLists;
+    });
+    setTask({ ...task, name: "" });
+    setInput("");
   };
 
   return (
@@ -43,13 +51,14 @@ export default function AddTask({ addTask }) {
       <VStack>
         <FormControl>
           <FormLabel>Task Title</FormLabel>
-          <Input 
-            type="text" 
+          <Input
+            type="text"
             onChange={(e) => {
-              setTitle(e.target.value);
-              setisEmpty(false);}}
-            
-            value={title} />
+              setTask({ ...task, uid: uuidv4(), name: e.target.value });
+              setInput(e.target.value);
+            }}
+            value={input}
+          />
         </FormControl>
 
         {isEmpty && (
@@ -59,9 +68,7 @@ export default function AddTask({ addTask }) {
                 <AlertDialogHeader fontSize="lg" fontWeight="bold">
                   Empty Input
                 </AlertDialogHeader>
-                <AlertDialogBody>
-                  Please enter a task title.
-                </AlertDialogBody>
+                <AlertDialogBody>Please enter a task title.</AlertDialogBody>
                 <AlertDialogFooter>
                   <Button colorScheme="blue" onClick={onClose}>
                     Close
@@ -72,8 +79,12 @@ export default function AddTask({ addTask }) {
           </AlertDialog>
         )}
 
-
-        <FormControl as="fieldset" onChange={handleTaskType}>
+        <FormControl
+          as="fieldset"
+          onChange={(e) => {
+            setTask({ ...task, uid: uuidv4(), status: e.target.value });
+          }}
+        >
           <FormLabel as="legend">Task Type</FormLabel>
           <RadioGroup defaultValue="ToDo">
             <HStack spacing="24px">
@@ -83,13 +94,11 @@ export default function AddTask({ addTask }) {
             </HStack>
           </RadioGroup>
         </FormControl>
-        
-        
+
         <Button
           colorScheme="blue"
           onClick={() => {
-            setTitle("");
-            handleAddCard();
+            handleAddTask();
           }}
         >
           Add Card

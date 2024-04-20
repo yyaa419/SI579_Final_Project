@@ -1,30 +1,39 @@
- import React from "react";
- import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { Flex } from "@chakra-ui/react";
-import "./TaskItem.css";
+import React from "react";
+import { Card, Flex, Text } from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
+import { useDrag } from "react-dnd";
 
-export const TaskItem = ({uid, title}) => {
-  const { attributes,listeners, setNodeRef, transform } = useSortable({
-    id: uid,
-    data: { title },
-  });
+
+export const TaskItem = ({item, handleRemoveTask}) => {
+
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: "task",
+    item: {uid: item.uid},
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    })
+  }))
 
 
   return (
-    <Flex 
-    ref={setNodeRef}
-    {...listeners}
-    {...attributes}
-    style={{
-      transform: CSS.Translate.toString(transform),
-    }}
-    className="task"
+    <Card
+      size="sm"
+      padding="2"
+      ref={drag}
+      style={{
+        opacity: isDragging ? 0.5 : 1,
+        cursor: 'move',
+      }}
     >
-      {title}
-    </Flex>
-
-   
+      <Flex justifyContent={"space-between"} alignItems={"center"}>
+        <Text>{item.name}</Text>
+        <CloseIcon
+          onClick={() => handleRemoveTask(item.uid)}
+          cursor="pointer"
+          color="gray.300"
+        ></CloseIcon>
+      </Flex>
+    </Card>
   );
 };
 
