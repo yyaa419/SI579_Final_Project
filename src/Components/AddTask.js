@@ -34,7 +34,7 @@ export default function AddTask({ itemLists, setItemLists }) {
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
 
-  // the handleAddTask function is used to add the task to the task list, since I have to 
+  // the handleAddTask function done by myself is used to add the task to the task list, since I have to 
   // make sure that the input is not empty, so I add the isEmpty state to judge whether the input is empty
   const handleAddTask = () => {
     if (task.name.trim() === "") {
@@ -52,6 +52,7 @@ export default function AddTask({ itemLists, setItemLists }) {
     setInput("");
   };
 
+  // the return part is done by myself, I use the chakra-ui to implement the input and radio button
   return (
     <Flex w="60%" p="5" alignItems="center">
       <VStack>

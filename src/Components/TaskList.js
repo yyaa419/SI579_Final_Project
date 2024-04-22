@@ -24,6 +24,7 @@ const TaskList = ({ title, itemLists, addItemtoList, handleRemoveTask }) => {
     // the css style is implemented by using chakra-ui, I tried differnet card styles,
     // and found this one is the most suitable for the task list
     // with the title, I could assign specific color and other corresponding type property to the task list
+    // this part is done by myself
     <Flex
       direction="column"
       flex="3"
