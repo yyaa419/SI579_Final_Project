@@ -20,16 +20,22 @@ import React, { useState } from "react";
 
 export default function AddTask({ itemLists, setItemLists }) {
   const [task, setTask] = useState({
+    // this uuid idea is also from the reference, it's used to generate a unique id for each tasks
+    // I pick it since I don't want to set name as the identifier since it's very possibile that
+    // there are two tasks with the same name
     uid: uuidv4(),
     name: "",
     status: "ToDo",
   });
 
+  // the input judegment is by myself, I want to make sure that the input is not empty
   const [input, setInput] = useState("");
   const [isEmpty, setisEmpty] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const onClose = () => setIsOpen(false);
 
+  // the handleAddTask function is used to add the task to the task list, since I have to 
+  // make sure that the input is not empty, so I add the isEmpty state to judge whether the input is empty
   const handleAddTask = () => {
     if (task.name.trim() === "") {
       setisEmpty(true);
@@ -61,6 +67,7 @@ export default function AddTask({ itemLists, setItemLists }) {
           />
         </FormControl>
 
+
         {isEmpty && (
           <AlertDialog isOpen={isOpen} onClose={onClose}>
             <AlertDialogOverlay>
@@ -78,7 +85,7 @@ export default function AddTask({ itemLists, setItemLists }) {
             </AlertDialogOverlay>
           </AlertDialog>
         )}
-
+        {/* the Radio button is implemented by myself, so that it's convenient for user to choose the task type  */}
         <FormControl
           as="fieldset"
           onChange={(e) => {
