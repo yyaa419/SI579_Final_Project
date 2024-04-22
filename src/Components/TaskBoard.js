@@ -11,9 +11,11 @@ const TaskBoard = ({itemLists, setItemLists}) => {
   const [Done, setDone] = useState([])
 
   useEffect(() => {
+    if (itemLists) {
       setToDo(itemLists.filter((item) => item.status === "ToDo"));
       setInProgress(itemLists.filter((item) => item.status === "InProgress"));
       setDone(itemLists.filter((item) => item.status === "Done"));
+    }
   }, [itemLists]);
 
   const handleRemoveTask = (uid) => {

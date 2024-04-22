@@ -7,7 +7,10 @@ function App() {
   const [itemLists, setItemLists] = useState([]);
   
   useEffect(() => {
-   setItemLists(JSON.parse(localStorage.getItem("itemLists")));
+    const data = localStorage.getItem("itemLists");
+    if (data) {
+      setItemLists(JSON.parse(data));
+    }
  }, []);
   
   return (
